@@ -1,65 +1,181 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import HomeContent from "./components/HomeContent/HomeContent";
+import GalleryContent from "./components/GalleryContent/GalleryContent";
+import MusicContent from "./components/MusicContent/MusicContent";
+
+const globalScale = 1.3;
+
+export const itemVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { opacity: 1, scale: 1 },
+};
+
+export const posMap = {
+  tr: { top: "offset", right: "offset", rotate: "12deg" },
+  tl: { top: "offset", left: "offset", rotate: "-12deg" },
+  br: { bottom: "offset", right: "offset", rotate: "12deg" },
+  bl: { bottom: "offset", left: "offset", rotate: "-12deg" },
+};
+
+export default function Page() {
+  const [activeTab, setActiveTab] = useState("home");
+
+  const leftButtons = [
+    {
+      id: "home",
+      label: "home",
+      symbol: "/star2.svg",
+      position: "tl",
+      offset: -15,
+    },
+    {
+      id: "gallery",
+      label: "gallery",
+      symbol: "/star2.svg",
+      position: "tr",
+      offset: -15,
+    },
+    {
+      id: "music",
+      label: "music",
+      symbol: "/star3.svg",
+      position: "bl",
+      offset: -15,
+    },
+    {
+      id: "blog",
+      label: "blog",
+      symbol: "/flower.svg",
+      position: "br",
+      offset: -15,
+    },
+  ];
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, staggerChildren: 0.1 },
+    },
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="flex items-center justify-center min-h-screen p-4 overflow-hidden">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        style={{ scale: globalScale }}
+        className="flex flex-col items-center justify-center origin-center"
+      >
+        <motion.img
+          variants={itemVariants}
+          className="max-w-sm w-full h-auto mb-8"
+          src="/logo.svg"
+          alt="Logo"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <div className="flex items-start justify-center">
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col gap-5 w-50 mr-5"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            {leftButtons.map((btn, index) => {
+              const config =
+                posMap[btn.position as keyof typeof posMap] || posMap.tr;
+              const offsetValue = `${btn.offset ?? -12}px`;
+
+              return (
+                <motion.button
+                  key={btn.id}
+                  onClick={() => {
+                    if (btn.id === "blog") {
+                      window.open("https://t.me/desuka_pictures", "_blank");
+                    } else {
+                      setActiveTab(btn.id);
+                    }
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`relative text-2xl flex-1 p-1 rounded-4xl text-center text-white font-bold transition-colors ${
+                    activeTab === btn.id ? "bg-purple-500" : "bg-brand-purple"
+                  }`}
+                >
+                  <motion.span
+                    className="absolute text-2xl"
+                    style={{
+                      top: config.top === "offset" ? offsetValue : "auto",
+                      bottom: config.bottom === "offset" ? offsetValue : "auto",
+                      left: config.left === "offset" ? offsetValue : "auto",
+                      right: config.right === "offset" ? offsetValue : "auto",
+                      transform: `rotate(${config.rotate})`,
+                    }}
+                    animate={{ y: [0, -4, 0] }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 2,
+                      delay: index * 0.2,
+                    }}
+                  >
+                    <img src={btn.symbol} alt="" />
+                  </motion.span>
+                  {btn.label}
+                </motion.button>
+              );
+            })}
+          </motion.div>
+
+          <motion.div
+            layout
+            transition={{ layout: { duration: 0.4, ease: "easeInOut" } }}
+            variants={itemVariants}
+            className="rounded-4xl bg-white p-5 max-w-xl flex flex-col items-center min-h-[438px] max-h-[438px] w-[576px] overflow-hidden"
           >
-            Documentation
-          </a>
+            <AnimatePresence mode="wait" initial={false}>
+              {activeTab === "home" && (
+                <motion.div
+                  key="home"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="w-full flex flex-col items-center"
+                >
+                  <HomeContent />
+                </motion.div>
+              )}
+              {activeTab === "gallery" && (
+                <motion.div
+                  key="gallery"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="overflow-y-auto w-full"
+                >
+                  <h1 className="sticky top-1 bg-white z-10 text-3xl font-bold text-center text-gray-800">
+                    Look at my arts!! :0
+                  </h1>
+                  <GalleryContent />
+                </motion.div>
+              )}
+              {activeTab === "music" && (
+                <motion.div
+                  key="music"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="w-full flex flex-col items-center overflow-y-auto"
+                >
+                  <MusicContent />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </div>
-      </main>
+      </motion.div>
     </div>
   );
 }
