@@ -1,4 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Pangolin&display=swap");
+@font-face {
+  font-family: "Pangolin";
+  src: url("/Pangolin.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
 
 @theme {
@@ -7,15 +14,15 @@
 
 :root {
   --bg-color: #f4daf4;
-  --line-color: rgba(255, 255, 255, 0.25); /* Очень нежные линии */
+  --line-color: rgba(255, 255, 255, 0.25);
 }
 
 body {
   background-color: var(--bg-color);
-  /* Создаем сетку */
   background-image:
     linear-gradient(var(--line-color) 4px, transparent 1px),
     linear-gradient(90deg, var(--line-color) 4px, transparent 1px);
   background-size: 60px 60px;
+
   font-family: "Pangolin", cursive;
 }
