@@ -6,6 +6,14 @@ import HomeContent from "./components/HomeContent/HomeContent";
 import GalleryContent from "./components/GalleryContent/GalleryContent";
 import MusicContent from "./components/MusicContent/MusicContent";
 
+export interface PositionConfig {
+  top?: string;
+  bottom?: string;
+  left?: string;
+  right?: string;
+  rotate: string;
+}
+
 const globalScale = 1.3;
 
 export const itemVariants = {
@@ -13,7 +21,7 @@ export const itemVariants = {
   visible: { opacity: 1, scale: 1 },
 };
 
-export const posMap = {
+export const posMap: Record<string, PositionConfig> = {
   tr: { top: "offset", right: "offset", rotate: "12deg" },
   tl: { top: "offset", left: "offset", rotate: "-12deg" },
   br: { bottom: "offset", right: "offset", rotate: "12deg" },

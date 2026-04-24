@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import MusicPlayer from "../MusicPlayer/MusicPlayer";
 
 const musicData = [
@@ -71,7 +71,7 @@ const musicData = [
   },
 ];
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,

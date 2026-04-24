@@ -43,10 +43,22 @@ export default function GalleryContent() {
                     className="absolute pointer-events-none"
                     style={{
                       zIndex: 10,
-                      top: config.top === "offset" ? offsetValue : "auto",
-                      bottom: config.bottom === "offset" ? offsetValue : "auto",
-                      left: config.left === "offset" ? offsetValue : "auto",
-                      right: config.right === "offset" ? offsetValue : "auto",
+                      top:
+                        "top" in config && config.top === "offset"
+                          ? offsetValue
+                          : "auto",
+                      bottom:
+                        "bottom" in config && config.bottom === "offset"
+                          ? offsetValue
+                          : "auto",
+                      left:
+                        "left" in config && config.left === "offset"
+                          ? offsetValue
+                          : "auto",
+                      right:
+                        "right" in config && config.right === "offset"
+                          ? offsetValue
+                          : "auto",
                       transform: `rotate(${config.rotate})`,
                     }}
                     animate={{ y: [0, -4, 0] }}

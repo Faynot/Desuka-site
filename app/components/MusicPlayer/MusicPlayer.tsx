@@ -4,14 +4,26 @@ import React, { useEffect, useState, useRef } from "react";
 import { Play, Pause } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function MusicPlayer({ title, artist, cover, source }) {
+interface MusicPlayerProps {
+  title: string;
+  artist: string;
+  cover: string;
+  source: string;
+}
+
+export default function MusicPlayer({
+  title,
+  artist,
+  cover,
+  source,
+}: MusicPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [offset, setOffset] = useState(0);
 
-  const audioRef = useRef(null);
-  const pathRef = useRef(null);
-  const requestRef = useRef(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const pathRef = useRef<SVGPathElement | null>(null);
+  const requestRef = useRef<number | null>(null);
 
   const SVG_WIDTH = 400;
   const WAVE_STEP = 30;
