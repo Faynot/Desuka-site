@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Добавили useEffect
 import { motion, AnimatePresence } from "framer-motion";
 import HomeContent from "./components/HomeContent/HomeContent";
 import GalleryContent from "./components/GalleryContent/GalleryContent";
@@ -14,7 +14,7 @@ export interface PositionConfig {
   rotate: string;
 }
 
-const globalScale = 1.3;
+const BASE_SCALE = 1.3;
 
 export const itemVariants = {
   hidden: { opacity: 0, scale: 0.9 },
@@ -30,6 +30,29 @@ export const posMap: Record<string, PositionConfig> = {
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState("home");
+  const [globalScale, setGlobalScale] = useState(BASE_SCALE);
+
+  useEffect(() => {
+    const handleResize = () => {
+      switch (true) {
+        case window.innerWidth < 560:
+          setGlobalScale(0.5);
+          break;
+        case window.innerWidth < 640:
+          setGlobalScale(0.65);
+          break;
+        case window.innerWidth < 1024:
+          setGlobalScale(0.9);
+          break;
+        default:
+          setGlobalScale(BASE_SCALE);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const leftButtons = [
     {
@@ -72,13 +95,13 @@ export default function Page() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4 overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen p-4 overflow-hidden bg-brand-background">
       <motion.div
         initial="hidden"
         animate="visible"
         variants={containerVariants}
         style={{ scale: globalScale }}
-        className="flex flex-col items-center justify-center origin-center"
+        className="flex flex-col items-center justify-center origin-center transition-transform duration-300"
       >
         <motion.img
           variants={itemVariants}
