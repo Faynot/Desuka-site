@@ -8,7 +8,7 @@ export default function HomeContent() {
       label: "Telegram",
       symbol: "/heart.svg",
       icon: "/tg.svg",
-      link: "#",
+      link: "https://t.me/desuka_pictures",
       position: "tr",
       offset: -17,
     },
@@ -16,7 +16,7 @@ export default function HomeContent() {
       label: "Pinterest",
       symbol: "/circle.svg",
       icon: "/pi.svg",
-      link: "#",
+      link: "https://pin.it/5W04cpxiQ",
       position: "br",
       offset: -10,
     },
@@ -24,7 +24,7 @@ export default function HomeContent() {
       label: "Tiktok",
       symbol: "/star.svg",
       icon: "/tt.svg",
-      link: "#",
+      link: "https://www.tiktok.com/@desuka01",
       position: "tr",
       offset: -15,
     },
@@ -73,6 +73,8 @@ export default function HomeContent() {
               <motion.a
                 key={index}
                 href={btn.link}
+                target="_blank" // Открывает в новой вкладке
+                rel="noopener noreferrer" // Безопасность
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="relative text-2xl flex items-center px-3 flex-1 p-1 bg-brand-purple rounded-2xl text-white font-bold"
