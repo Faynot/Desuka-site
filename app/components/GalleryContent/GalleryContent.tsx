@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Добавили useEffect
+import { createPortal } from "react-dom"; // Добавили createPortal
 import { motion, AnimatePresence } from "framer-motion";
 import { posMap } from "../../page";
 
@@ -12,6 +13,12 @@ export default function GalleryContent() {
   ]);
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Ждем, пока компонент смонтируется, чтобы иметь доступ к document
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const symbols = ["/heart.svg", "/star.svg", "/circle.svg", "/flower.svg"];
 
@@ -94,34 +101,44 @@ export default function GalleryContent() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {selectedImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
-          >
-            <motion.img
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              src={selectedImage}
-              alt="Full size"
-              className="max-w-full max-h-full rounded-lg shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            />
+      {/* Используем портал, чтобы модалка вылетела за пределы scaled контейнера */}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {selectedImage && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedImage(null)}
+                // pointer-events-auto гарантирует кликабельность, z-[9999] поверх всего
+                className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+                style={{
+                  // Явно сбрасываем масштаб для модалки, если вдруг родительские стили просочатся
+                  transform: "none",
+                }}
+              >
+                <motion.img
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  src={selectedImage}
+                  alt="Full size"
+                  className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                />
 
-            <button
-              className="absolute top-6 right-6 text-white text-4xl font-light hover:text-gray-300"
-              onClick={() => setSelectedImage(null)}
-            >
-              &times;
-            </button>
-          </motion.div>
+                <button
+                  className="absolute top-6 right-6 text-white text-5xl font-light hover:text-gray-300 transition-colors"
+                  onClick={() => setSelectedImage(null)}
+                >
+                  &times;
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
     </div>
   );
 }

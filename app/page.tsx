@@ -179,7 +179,8 @@ export default function Page() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="w-full flex flex-col items-center"
+                /* Добавляем условие: если tab не home, добавляем overflow-y-auto */
+                className={`w-full flex flex-col items-center ${activeTab !== "home" ? "overflow-y-auto" : "overflow-visible"}`}
               >
                 {activeTab === "home" && <HomeContent />}
 
