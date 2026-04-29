@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react"; // Добавили useEffect
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import HomeContent from "./components/HomeContent/HomeContent";
 import GalleryContent from "./components/GalleryContent/GalleryContent";
@@ -34,14 +34,22 @@ export default function Page() {
 
   useEffect(() => {
     const handleResize = () => {
+      const width = window.innerWidth;
+
       switch (true) {
-        case window.innerWidth < 560:
+        case width < 367:
+          setGlobalScale(0.35);
+          break;
+        case width < 460:
+          setGlobalScale(0.45);
+          break;
+        case width < 560:
           setGlobalScale(0.5);
           break;
-        case window.innerWidth < 640:
+        case width < 640:
           setGlobalScale(0.65);
           break;
-        case window.innerWidth < 1024:
+        case width < 1024:
           setGlobalScale(0.9);
           break;
         default:
@@ -100,8 +108,9 @@ export default function Page() {
         initial="hidden"
         animate="visible"
         variants={containerVariants}
+        // Используем style для scale, чтобы избежать конфликтов с CSS переходами
         style={{ scale: globalScale }}
-        className="flex flex-col items-center justify-center origin-center transition-transform duration-300"
+        className="flex flex-col items-center justify-center origin-center"
       >
         <motion.img
           variants={itemVariants}
@@ -116,8 +125,7 @@ export default function Page() {
             className="flex flex-col gap-5 w-50 mr-5"
           >
             {leftButtons.map((btn, index) => {
-              const config =
-                posMap[btn.position as keyof typeof posMap] || posMap.tr;
+              const config = posMap[btn.position] || posMap.tr;
               const offsetValue = `${btn.offset ?? -12}px`;
 
               return (
@@ -161,48 +169,31 @@ export default function Page() {
           </motion.div>
 
           <motion.div
-            layout
-            transition={{ layout: { duration: 0.4, ease: "easeInOut" } }}
             variants={itemVariants}
-            className="rounded-4xl bg-white p-5 max-w-xl flex flex-col items-center min-h-[438px] max-h-[438px] w-[576px] overflow-hidden"
+            className="rounded-4xl bg-white p-5 flex flex-col items-center min-h-[450px] max-h-[450px] w-[576px] overflow-hidden"
           >
-            <AnimatePresence mode="wait" initial={false}>
-              {activeTab === "home" && (
-                <motion.div
-                  key="home"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="w-full flex flex-col items-center"
-                >
-                  <HomeContent />
-                </motion.div>
-              )}
-              {activeTab === "gallery" && (
-                <motion.div
-                  key="gallery"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="overflow-y-auto w-full"
-                >
-                  <h1 className="sticky top-1 bg-white z-10 text-3xl font-bold text-center text-gray-800">
-                    Look at my arts!! :0
-                  </h1>
-                  <GalleryContent />
-                </motion.div>
-              )}
-              {activeTab === "music" && (
-                <motion.div
-                  key="music"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="w-full flex flex-col items-center overflow-y-auto"
-                >
-                  <MusicContent />
-                </motion.div>
-              )}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="w-full flex flex-col items-center"
+              >
+                {activeTab === "home" && <HomeContent />}
+
+                {activeTab === "gallery" && (
+                  <>
+                    <h1 className="sticky top-0 bg-white z-10 text-3xl font-bold text-center text-gray-800 w-full">
+                      Look at my arts!! :0
+                    </h1>
+                    <GalleryContent />
+                  </>
+                )}
+
+                {activeTab === "music" && <MusicContent />}
+              </motion.div>
             </AnimatePresence>
           </motion.div>
         </div>
