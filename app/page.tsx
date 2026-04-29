@@ -108,7 +108,6 @@ export default function Page() {
         initial="hidden"
         animate="visible"
         variants={containerVariants}
-        // Используем style для scale, чтобы избежать конфликтов с CSS переходами
         style={{ scale: globalScale }}
         className="flex flex-col items-center justify-center origin-center"
       >
@@ -170,7 +169,7 @@ export default function Page() {
 
           <motion.div
             variants={itemVariants}
-            className="rounded-4xl bg-white p-5 flex flex-col items-center min-h-[450px] max-h-[450px] w-[576px] overflow-hidden"
+            className="rounded-4xl bg-white p-5 flex flex-col items-center min-h-[438px] max-h-[438px] w-[576px] overflow-hidden"
           >
             <AnimatePresence mode="wait">
               <motion.div
@@ -179,7 +178,6 @@ export default function Page() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                /* Добавляем условие: если tab не home, добавляем overflow-y-auto */
                 className={`w-full flex flex-col items-center ${activeTab !== "home" ? "overflow-y-auto" : "overflow-visible"}`}
               >
                 {activeTab === "home" && <HomeContent />}
