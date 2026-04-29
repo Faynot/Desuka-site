@@ -5,12 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { posMap } from "../../page";
 
 export default function GalleryContent() {
-  const [arts] = useState<string[]>([
-    "https://i.imgur.com/47D1SPZ.jpeg",
-    "https://i.imgur.com/8CuT7hp.jpeg",
-    "https://i.imgur.com/47D1SPZ.jpeg",
-    "https://i.imgur.com/8CuT7hp.jpeg",
-  ]);
+  const [arts] = useState<string[]>(["https://i.imgur.com/47D1SPZ.jpeg"]);
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
